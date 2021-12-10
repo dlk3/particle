@@ -1,7 +1,7 @@
 powerMonitor Application
 ==
 
-**Purpose:** Use a Particle Boron device to monitor the AC power at a remote location.
+**Purpose:** Use a [Particle Boron](https://store.particle.io/products/boron-lte) device to monitor the AC power at a remote location.  Send e-mail notifications on power outages.  Sending e-mail messages to a [carrier's SMS gateway](https://smsemailgateway.com) allows this application to send text messages as well.
 
 Use the Particle [web IDE](https://build.particle.io/build) or install the [Particle CLI](https://docs.particle.io/tutorials/developer-tools/cli/) on a workstation
 
@@ -27,16 +27,16 @@ Node-RED Notes
 --
 I have deployed to the Node-RED instance on my "webserver"
 
-I also tested deploying to Google's "Cloud Run" environment.  This allows deploying a web service to the cloud in such a manner that you are only charged when the web service actually executes, i.e., when something calls the service.  You are not charged when the service is just sitting, waiting.  For this service, the changes should be almost nil, as it only gets called when the power is out at the facility being monitored.
+I also tested deploying to Google's "Cloud Run" environment.  This allows deploying a web service to the cloud in such a manner that you are only charged when the web service actually executes, i.e., when something calls the service.  You are not charged when the service is just sitting, waiting.  For this service, the charges should be almost nil, as it only gets called when the power is out at the facility being monitored.
 
 Cloud Run requires that you build a Docker container that contains your web service.  That container is then deployed to the Cloud Run environment where it runs when called.  Here's how I built that container:
 
 Deploy an empty Node-RED container locally, binding the Node-RED container's data directory to a local directory  
   
-    $ mkdir -m 777 -p ~/src/powerMonitor/nodered.docker/data
+    $ mkdir -p ~/src/powerMonitor/nodered.docker/data
     $ docker run --rm -p 1880:1880 -v ~/src/powerMonitor/nodered.docker/data:/data --name node-red nodered/node-red:latest</pre>
 
-Import the flows.json from this project into that instance of Node-RED.
+Import the flows.json file from this project into that instance of Node-RED.
 
 Configure the "changes" node in the flow so that it can send email via the target SMTP server.
 
@@ -54,6 +54,6 @@ Test this container locally to be sure that it works
 
     $ docker run --rm -p 1880:1880 --name sendmailservice sendmailservice
     $ curl --header "Content-Type: application/json" -d '{"address":"email@address.one","message":"testing the flow"}' http://localhost:1880/sendMail
-    $ docker stop sendmailservice</pre>
+    $ docker stop sendmailservice
 
 Deploy and run this container image in the Cloud Run environment.

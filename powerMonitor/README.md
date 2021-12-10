@@ -70,12 +70,15 @@ Using the project name drop down at the top of either of the above pages, select
 
 Create a docker registry within that project and push the Node-RED container into that registry.  See this [HOWTO](https://cloud.google.com/artifact-registry/docs/docker/quickstart?hl=en_US).
 
-Commands I used to build and push my container from my development system:<pre>$ cd ~/src/Particle/powerMonitor/nodered.docker
+Commands I used to build and push my container from my development system:
+<pre>
+$ cd ~/src/Particle/powerMonitor/nodered.docker
 $ docker build -t northamerica-northeast2-docker.pkg.dev/email-alert-service/docker-containers/sendmailservice:latest .
 $ docker run --rm -p 1880:1880 --name sendmailservice northamerica-northeast2-docker.pkg.dev/email-alert-service/docker-containers/sendmailservice:latest
 $ curl --header "Content-Type: application/json" -d '{"address":"<i>email@address.here</i>","message":"testing the flow"}' http://localhost:1880/sendMail
 $ docker stop sendmailservice
-$ docker push northamerica-northeast2-docker.pkg.dev/email-alert-service/docker-containers/sendmailservice:latest</pre>
+$ docker push northamerica-northeast2-docker.pkg.dev/email-alert-service/docker-containers/sendmailservice:latest
+</pre>
 
 Open the container entry in the Artifact Registry console and select "Deploy to Cloud Run" from the the three-dot drop-down menu next to the digest entry.
 

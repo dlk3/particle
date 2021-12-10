@@ -57,3 +57,31 @@ Test this container locally to be sure that it works
     $ docker stop sendmailservice
 
 Deploy and run this container image in the Cloud Run environment.
+
+Google Cloud Run Notes
+--
+
+Cloud Run console: https://console.cloud.google.com/run
+<br />Artifact Registry console: https://console.cloud.google.com/artifacts
+
+Using the project name drop down at the top of either of the above pages, select or create the project you want to work within ("email-alert-service" in my case)
+
+Create a docker registry within that project and push the Node-RED container into that registry.  [HOWTO](https://cloud.google.com/artifact-registry/docs/docker/quickstart?hl=en_US)
+
+Commands used to push my container from my development system:
+
+    $ docker tag sendmailservice:latest northamerica-northeast2-docker.pkg.dev/email-alert-service/docker-container/sendmailservice:latest
+    $ docker push northamerica-northeast2-docker.pkg.dev/email-alert-service/docker-container/sendmailservice:latest
+
+Open the container entry in the Artifact Registry console and select "Deploy to Cloud Run" from the the three-dot drop-down menu next to the digest entry.
+
+* Make sure that region matches the registry's region.
+* Make sure to select "Allow unauthorized invocations" on the second page under "Authentication" to make this a public service
+
+Service URL will be displayed after creation process is complete.
+
+Test the service:
+
+    $ curl --header "Content-Type: application/json" -d '{"address":"email@address.one","message":"testing the flow"}' https://<service-url>/sendMail
+
+    

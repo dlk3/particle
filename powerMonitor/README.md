@@ -7,7 +7,7 @@ Use the Particle [web IDE](https://build.particle.io/build) or install the [Part
 
 Upload powerMonitor.iso and powerMonitorConfig.h to the web IDE or compile and flash using the CLI:
 <pre>$ particle compile boron
-$ particle flash <device-name></pre>
+$ particle flash <i>device-name</i></pre>
 
 Deploy flows.json to a public Node-Red instance (see Notes.)   Configure the SMTP server used to send e-mails in the "change" node of the flow.
 

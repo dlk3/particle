@@ -19,10 +19,19 @@
  * Use a Particle Boron device as a remote power monitor.  Events are
  * published when the device loses/regains AC power.
  *
- * Set email addresses for those who should receive event messages in the 
- * addresses[] array below.
+ * Create a powerMonitorConfig.h file containing:
+ * - the email addresses for those who should receive event messages from
+ *   this application,
+ * - the name you gave the Particle webhook that handles the events published
+ *   by the application,in the 
+ * - the timezone offset value for your local timezone
  *  
- * Set meaningful device names for your devices in the setup() function below.
+ * See the powerMonitor.h.example file distributed with this project for
+ * a template.
+ * 
+ * Set device names for your devices, based on their IDs, in the setup()
+ * function below.
+ * 
  **/
 
 #include "powerMonitorConfig.h"
@@ -37,14 +46,15 @@ time_t lastMessageSent;
 
 void setup() {
 
-	// Set location string based on device id
+	// Set location string based on device id using arrays defined in powerMonitorConfig.h
 	String id = System.deviceID();
-	if (id == "e00fce68cc1dc3c1be36a574") {
-		location = "Unit 158";
-	} else {
-		location = String::format("(unknown: %s)", id.c_str());
+	location = String::format("(unknown: %s)", id.c_str());
+	for (int i=0; i < arraySize(deviceIDs); i++) {
+		if (deviceIDs[i] == id) {
+			location = deviceNames[i];
+		}
 	}
-	
+
 	// Set timezone
 	setupTimeZone();
     

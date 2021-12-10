@@ -7,3 +7,11 @@ const char* webhook = "sendMail";
 
 //  Numbers of hours, plus or minus, that your local timezone is from GMT/UTC
 int timezoneOffset = -5;
+
+//  Map Boron device IDs to meaningful names
+String deviceIDs[] = {
+	"e00fce68cc1dc3c1be36a574"
+};
+String deviceNames[] = {
+	"Unit 158"
+};

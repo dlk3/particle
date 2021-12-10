@@ -34,7 +34,7 @@ Cloud Run requires that you build a Docker container that contains your web serv
 Deploy an empty Node-RED container locally, binding the Node-RED container's data directory to a local directory  
   
     $ mkdir -p ~/src/powerMonitor/nodered.docker/data
-    $ docker run --rm -p 1880:1880 -v ~/src/powerMonitor/nodered.docker/data:/data --name node-red nodered/node-red:latest</pre>
+    $ docker run --rm -p 1880:1880 -v ~/src/powerMonitor/nodered.docker/data:/data --name node-red nodered/node-red:latest
 
 Import the flows.json file from this project into that instance of Node-RED.
 
@@ -45,6 +45,8 @@ Test the local Node-RED flow:
     $ curl --header "Content-Type: application/json" -d '{"address":"email@address.one","message":"testing the flow"}' http://localhost:1880/sendMail</pre>
 
 Stop the local Docker container.
+
+There is no persistance store associated with this container, so we will turn off the Node-RED admin/edit UI altogether.  Edit the settings.js file in the data directory and set <code>httpAdminRoot: false,</code>.
 
 Build a "sendMailService" Docker container image using the Dockerfile in the nodered.docker directory of this project.  It will include the flows.json file that was created in the previous step. Adjust the "COPY" step in the Dockerfile if necessary, to copy from the correct local directory.
 
@@ -68,10 +70,14 @@ Using the project name drop down at the top of either of the above pages, select
 
 Create a docker registry within that project and push the Node-RED container into that registry.  [HOWTO](https://cloud.google.com/artifact-registry/docs/docker/quickstart?hl=en_US)
 
-Commands used to push my container from my development system:
+Commands I used to build and push my container from my development system:
 
-    $ docker tag sendmailservice:latest northamerica-northeast2-docker.pkg.dev/email-alert-service/docker-container/sendmailservice:latest
-    $ docker push northamerica-northeast2-docker.pkg.dev/email-alert-service/docker-container/sendmailservice:latest
+	$ cd ~/src/Particle/powerMonitor/nodered.docker
+	$ docker build -t northamerica-northeast2-docker.pkg.dev/email-alert-service/docker-containers/sendmailservice:latest .
+    $ docker run --rm -p 1880:1880 --name sendmailservice northamerica-northeast2-docker.pkg.dev/email-alert-service/docker-containers/sendmailservice:latest
+    $ curl --header "Content-Type: application/json" -d '{"address":"xxxxxxxx@xxxx.xxx","message":"testing the flow"}' http://localhost:1880/sendMail
+    $ docker stop sendmailservice
+    $ docker push northamerica-northeast2-docker.pkg.dev/email-alert-service/docker-containers/sendmailservice:latest
 
 Open the container entry in the Artifact Registry console and select "Deploy to Cloud Run" from the the three-dot drop-down menu next to the digest entry.
 
@@ -81,7 +87,9 @@ Open the container entry in the Artifact Registry console and select "Deploy to 
 Service URL will be displayed after creation process is complete.
 
 Test the service:
-
-    $ curl --header "Content-Type: application/json" -d '{"address":"email@address.one","message":"testing the flow"}' https://<service-url>/sendMail
+    
+    $ curl --header "Content-Type: application/json" -d '{"address":"xxxx@xxxxx.xxx","message":"testing the flow"}' https://<service-url>/sendMail
+    
+Node-RED's console messages are available in the service Log tab in the Cloud Run console.
 
     

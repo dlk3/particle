@@ -1,0 +1,3 @@
+*.bin
+powerMonitorConfig.h
+nodered.docker/data/*

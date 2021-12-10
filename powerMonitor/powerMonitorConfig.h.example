@@ -1,0 +1,9 @@
+//  List of email addresses that should receive alerets
+String addresses[] = {"email@address.one", "email@address.two", "email@address.three"};
+
+//  The name of the Particle webhook you defined to handle the events that come from
+//  this application
+const char* webhook = "sendMail";
+
+//  Numbers of hours, plus or minus, that your local timezone is from GMT/UTC
+int timezoneOffset = -5;

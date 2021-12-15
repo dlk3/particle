@@ -37,7 +37,7 @@ I deploying the flow to Google's "Cloud Run" environment.  This allows deploying
 Cloud Run requires that you build a Docker container that contains your web service.  That container is then deployed to the Cloud Run environment where it runs when the web service is called.  Here's how I built my container:
 
 Deploy an empty Node-RED container locally, binding the Node-RED container's data directory to a local directory:
-<pre>  
+<pre>
 $ mkdir -p ~/src/powerMonitor/nodered.docker/data
 $ docker run --rm -p 1880:1880 -v ~/src/powerMonitor/nodered.docker/data:/data --name node-red nodered/node-red:latest
 </pre>

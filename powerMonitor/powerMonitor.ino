@@ -23,7 +23,7 @@
  * - the email addresses for those who should receive event messages from
  *   this application,
  * - the name you gave the Particle webhook that handles the events published
- *   by the application,in the 
+ *   by the application,
  * - the timezone offset value for your local timezone
  * - human-readable device names for the alerts that this application will
  *   generate
@@ -80,8 +80,8 @@ void setup() {
         sendData(s);        
     }
     
-    //  Set up a function to allow me to query the power status
-    //  from the Particle Console
+	//  Set up a function to allow me to query the power status
+	//  from the Particle Console
     Particle.function("getStatus", getStatus);
 
 	//  Set up a function that allows my network monitor to check the device

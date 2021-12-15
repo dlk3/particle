@@ -25,12 +25,8 @@
  * - the name you gave the Particle webhook that handles the events published
  *   by the application,in the 
  * - the timezone offset value for your local timezone
- *  
- * See the powerMonitor.h.example file distributed with this project for
- * a template.
- * 
- * Set device names for your devices, based on their IDs, in the setup()
- * function below.
+ * - human-readable device names for the alerts that this application will
+ *   generate
  * 
  **/
 

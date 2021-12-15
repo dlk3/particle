@@ -5,7 +5,7 @@ powerMonitor Application
 
 Use the Particle [web IDE](https://build.particle.io/build) or install the [Particle CLI](https://docs.particle.io/tutorials/developer-tools/cli/) on a workstation
 
-Edit powerMonitor.h to set the e-mail addresses that will recieve alerts and the device IDs and names of the devices that will do the power monitoring.
+Edit powerMonitorConfig.h to set the e-mail addresses that will recieve alerts and the device IDs and names of the devices that will do the power monitoring.  Notice the web hook name configured in this file.  It must match the name you use for the web hook you will define in the Particle Console. (See below)
 
 Upload powerMonitor.iso and powerMonitorConfig.h to the web IDE to compile and flash from there, or compile and flash on your local machine using the CLI:
 <pre>$ particle compile boron
@@ -16,6 +16,7 @@ Deploy flows.json to a public Node-Red instance (see section below.)   Configure
 FYI: The flow is designed to handle messages destined for traditional email, as well as messages going to email-to-text gateways.  Emails need a "Subject" line, texts do not.  When the target email address is all digits before the "@" symbol, the powerMonitor.ino application will send a request to the Node-RED flow that has an empty subject line.  When the flow sees that request, it sends the message through its "sms messages" node.  Every other request goes through the "email" node.
 
 Create a Particle web hook to handle the events coming from this application, forwarding them to the Node-RED service:
+<br /><i>The name of this webhook must match what is configured in powerMonitorConfig.h.</i>
 
 * Event Name: sendMail
 * Full URL: The URL of your Node-RED flow

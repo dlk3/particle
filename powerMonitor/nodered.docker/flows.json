@@ -1,174 +1,232 @@
 [
-  {
-    "id": "e794096b478f039e",
-    "type": "tab",
-    "label": "sendMail",
-    "disabled": false,
-    "info": "My Particle Boron IoT hub uses this web service to send SMS texts and e-mails when events occur.",
-    "env": []
-  },
-  {
-    "id": "019f4f912c25518d",
-    "type": "http in",
-    "z": "e794096b478f039e",
-    "name": "",
-    "url": "/sendMail",
-    "method": "post",
-    "upload": false,
-    "swaggerDoc": "",
-    "x": 140,
-    "y": 100,
-    "wires": [
-      [
-        "77712d6ba0885544",
-        "b76eab6c8cad2a7c"
-      ]
-    ]
-  },
-  {
-    "id": "77712d6ba0885544",
-    "type": "debug",
-    "z": "e794096b478f039e",
-    "name": "",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "true",
-    "targetType": "full",
-    "statusVal": "",
-    "statusType": "auto",
-    "x": 310,
-    "y": 160,
-    "wires": []
-  },
-  {
-    "id": "53b0633bb453662e",
-    "type": "debug",
-    "z": "e794096b478f039e",
-    "name": "",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "true",
-    "targetType": "full",
-    "statusVal": "",
-    "statusType": "auto",
-    "x": 670,
-    "y": 160,
-    "wires": []
-  },
-  {
-    "id": "e937c2f66e688662",
-    "type": "http response",
-    "z": "e794096b478f039e",
-    "name": "",
-    "statusCode": "200",
-    "headers": {},
-    "x": 680,
-    "y": 100,
-    "wires": []
-  },
-  {
-    "id": "be8cc67c2a470e55",
-    "type": "simple-sendmail",
-    "z": "e794096b478f039e",
-    "name": "",
-    "x": 520,
-    "y": 100,
-    "wires": [
-      [
-        "e937c2f66e688662",
-        "53b0633bb453662e"
-      ]
-    ]
-  },
-  {
-    "id": "b76eab6c8cad2a7c",
-    "type": "change",
-    "z": "e794096b478f039e",
-    "name": "",
-    "rules": [
-      {
-        "t": "set",
-        "p": "mail.transport.host",
-        "pt": "msg",
-        "to": "<smtp.server.hostname>",
-        "tot": "str"
-      },
-      {
-        "t": "set",
-        "p": "mail.transport.port",
-        "pt": "msg",
-        "to": "<smtp_server_port>",
-        "tot": "str"
-      },
-      {
-        "t": "set",
-        "p": "mail.transport.auth.user",
-        "pt": "msg",
-        "to": "<smtp_useird>",
-        "tot": "str"
-      },
-      {
-        "t": "set",
-        "p": "mail.transport.auth.pass",
-        "pt": "msg",
-        "to": "<smtp_password>",
-        "tot": "str"
-      },
-      {
-        "t": "set",
-        "p": "mail.options.to",
-        "pt": "msg",
-        "to": "payload.address",
-        "tot": "msg"
-      },
-      {
-        "t": "set",
-        "p": "mail.options.from",
-        "pt": "msg",
-        "to": "<your@email.address>",
-        "tot": "str"
-      },
-      {
-        "t": "set",
-        "p": "mail.options.text",
-        "pt": "msg",
-        "to": "payload.message",
-        "tot": "msg"
-      }
-    ],
-    "action": "",
-    "property": "",
-    "from": "",
-    "to": "",
-    "reg": false,
-    "x": 340,
-    "y": 100,
-    "wires": [
-      [
-        "be8cc67c2a470e55",
-        "726e1a4cbb5f6ede"
-      ]
-    ]
-  },
-  {
-    "id": "726e1a4cbb5f6ede",
-    "type": "debug",
-    "z": "e794096b478f039e",
-    "name": "",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "true",
-    "targetType": "full",
-    "statusVal": "",
-    "statusType": "auto",
-    "x": 510,
-    "y": 160,
-    "wires": []
-  }
+    {
+        "id": "9f8722e1b95e50f8",
+        "type": "tab",
+        "label": "sendMail",
+        "disabled": false,
+        "info": "My Particle Boron IoT hub uses this web service to send SMS texts and e-mails when events occur.",
+        "env": []
+    },
+    {
+        "id": "7e391eb145ffcd73",
+        "type": "http in",
+        "z": "9f8722e1b95e50f8",
+        "name": "",
+        "url": "/sendMail",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 150,
+        "y": 100,
+        "wires": [
+            [
+                "14424be995525d11"
+            ]
+        ]
+    },
+    {
+        "id": "73ac70fd453bce4c",
+        "type": "http response",
+        "z": "9f8722e1b95e50f8",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 860,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "9936cd8efe3e5ce5",
+        "type": "simple-sendmail",
+        "z": "9f8722e1b95e50f8",
+        "name": "",
+        "x": 700,
+        "y": 100,
+        "wires": [
+            [
+                "73ac70fd453bce4c"
+            ]
+        ]
+    },
+    {
+        "id": "722983389ba71778",
+        "type": "change",
+        "z": "9f8722e1b95e50f8",
+        "name": "eMail",
+        "rules": [
+            {
+                "t": "set",
+                "p": "mail.transport.host",
+                "pt": "msg",
+                "to": "<smtp.server.hostname>",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "mail.transport.port",
+                "pt": "msg",
+                "to": "<smtp.server.port>",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "mail.transport.auth.user",
+                "pt": "msg",
+                "to": "<smtp.service.userid>",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "mail.transport.auth.pass",
+                "pt": "msg",
+                "to": "<smtp.service.password>",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "mail.options.from",
+                "pt": "msg",
+                "to": "valid@email.address>",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "mail.options.to",
+                "pt": "msg",
+                "to": "payload.address",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "mail.options.subject",
+                "pt": "msg",
+                "to": "payload.subject",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "mail.options.text",
+                "pt": "msg",
+                "to": "payload.message",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 490,
+        "y": 120,
+        "wires": [
+            [
+                "9936cd8efe3e5ce5"
+            ]
+        ]
+    },
+    {
+        "id": "14424be995525d11",
+        "type": "switch",
+        "z": "9f8722e1b95e50f8",
+        "name": "",
+        "property": "payload.subject",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "empty"
+            },
+            {
+                "t": "nempty"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 350,
+        "y": 100,
+        "wires": [
+            [
+                "b075da4cf4da0e71"
+            ],
+            [
+                "722983389ba71778"
+            ]
+        ],
+        "inputLabels": [
+            "msg.payload.subject"
+        ],
+        "outputLabels": [
+            "empty",
+            "not empty"
+        ]
+    },
+    {
+        "id": "b075da4cf4da0e71",
+        "type": "change",
+        "z": "9f8722e1b95e50f8",
+        "name": "SMS message",
+        "rules": [
+            {
+                "t": "set",
+                "p": "mail.transport.host",
+                "pt": "msg",
+                "to": "<smtp.server.hostname>",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "mail.transport.port",
+                "pt": "msg",
+                "to": "<smtp.server.port>",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "mail.transport.auth.user",
+                "pt": "msg",
+                "to": "<smtp.service.userid>",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "mail.transport.auth.pass",
+                "pt": "msg",
+                "to": "<smtp.service.password>",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "mail.options.from",
+                "pt": "msg",
+                "to": "<valid@email.address>",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "mail.options.to",
+                "pt": "msg",
+                "to": "payload.address",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "mail.options.text",
+                "pt": "msg",
+                "to": "payload.message",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 520,
+        "y": 80,
+        "wires": [
+            [
+                "9936cd8efe3e5ce5"
+            ]
+        ]
+    }
 ]

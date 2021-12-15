@@ -49,7 +49,7 @@ void setup() {
 	// Set location string based on device id using arrays defined in powerMonitorConfig.h
 	String id = System.deviceID();
 	location = String::format("(unknown: %s)", id.c_str());
-	for (int i=0; i < arraySize(deviceIDs); i++) {
+	for (unsigned int i=0; i < arraySize(deviceIDs); i++) {
 		if (deviceIDs[i] == id) {
 			location = deviceNames[i];
 		}
@@ -77,10 +77,10 @@ void setup() {
     
     //  Send an initial status message
     if (onBattery) {
-        String s = String::format("%s Monitor Initialized - AC power is off, battery at %0.1f%% (%0.2fV)", location.c_str(), getBatteryPercentage(), getBatteryVolts());
+        String s = String::format("Initialized - AC power is off, battery at %0.1f%%", System.batteryCharge());
         sendData(s);
     } else {
-        String s = String::format("%s Monitor Initialized - AC power is on, battery at %0.1f%% (%0.2fV)", location.c_str(), getBatteryPercentage(), getBatteryVolts());
+        String s = String::format("Initialized - AC power is on, battery at %0.1f%%", System.batteryCharge());
         sendData(s);        
     }
     
@@ -115,7 +115,7 @@ void loop() {
             lastMessageSent = Time.now();
         } else if (Time.now() - lastMessageSent > 3600) {
             //  If the power has been out for an hour, send another message
-            s = String::format("%s - AC power has been out since %s", location.c_str(), Time.format(timePowerLost, "%r on %D").c_str());
+            s = String::format("AC power has been out since %s", Time.format(timePowerLost, "%r on %D").c_str());
             sendData(s);
             lastMessageSent = Time.now();
         }
@@ -123,16 +123,16 @@ void loop() {
         //  Power source changed from battery to USB
         onBattery = false;
         onUSB = true;
-        s = String::format("%s - AC power restored", location.c_str());
+        s = "AC power restored";
         sendData(s);
     } 
 
-    // Check the battery voltage
-    float p = getBatteryPercentage();
+    // Check for a low battery
+    float p = System.batteryCharge();
     if (p <= 25) { 
         if (!lowBattery) {
             lowBattery = true;
-            s = String::format("%s - Low battery - %0.1f%% (%0.2fV)", location.c_str(), p, getBatteryVolts());
+            s = String::format("Low battery - %0.1f%%", p);
             sendData(s);
         }
     } else {
@@ -143,22 +143,18 @@ void loop() {
 //  Publish an event to our webhook containing an e-mail address
 //  and the message that should be sent to that address
 void sendData(String message) {
-    for (int i=0; i < arraySize(addresses); i++) {
-        String s = String::format("[{\"key\":\"address\", \"value\":\"%s\"},{\"key\":\"message\", \"value\":\"%s\"}]", addresses[i].c_str(), message.c_str());
+    for (unsigned int i=0; i < arraySize(addresses); i++) {
+		String s;
+		//  If the user name portion of the address is all numeric then assume
+		//  this is a message to an SMS gateway and leave the subject blank.
+		if (addresses[i].substring(0, addresses[i].indexOf('@')).toInt() != 0) {
+			s = String::format("[{\"key\":\"address\", \"value\":\"%s\"},{\"key\":\"subject\", \"value\":\"\"},{\"key\":\"message\", \"value\":\"%s - %s\"}]", addresses[i].c_str(), location.c_str(), message.c_str());
+		} else {
+			s = String::format("[{\"key\":\"address\", \"value\":\"%s\"},{\"key\":\"subject\", \"value\":\"%s Alert\"},{\"key\":\"message\", \"value\":\"%s\"}]", addresses[i].c_str(), location.c_str(), message.c_str());
+		}
         Particle.publish(webhook, s, PRIVATE);
         delay(1000);
     };
-}
-
-//  Functions to return battery volts or percentage.  Percentage
-//  formula for 3.7V LiPo batteries is by Roho in the thread at
-//  https://electronics.stackexchange.com/questions/435837/calculate-battery-percentage-on-lipo-battery
-float getBatteryVolts() {
-    FuelGauge fuel;
-    return fuel.getVCell();
-}
-float getBatteryPercentage() {
-    return 123 - 123 / pow((1 + pow(getBatteryVolts() / 3.7, 80)), 0.165);
 }
 
 //  Query the current power status and publish a message containing the results
@@ -166,9 +162,9 @@ int getStatus(String command) {
     int powerSource = System.powerSource();
     String s = "";
     if (powerSource == POWER_SOURCE_BATTERY) {
-        s = String::format("%s Status - AC power has been out since %s, battery at %0.1f%% (%0.2fV)", location.c_str(), Time.format(timePowerLost, "%r on %D").c_str(), getBatteryPercentage(), getBatteryVolts());
+        s = String::format("AC power has been out since %s, battery at %0.1f%%", Time.format(timePowerLost, "%r on %D").c_str(), System.batteryCharge());
     } else {
-        s = String::format("%s Status - AC power is on, battery at %0.1f%% (%0.2fV)", location.c_str(), getBatteryPercentage(), getBatteryVolts());
+        s = String::format("AC power is on, battery at %0.1f%%", System.batteryCharge());
     }
     Particle.publish("getStatus", s, PRIVATE);
     delay(1000);
